@@ -9,7 +9,9 @@ import { hash } from 'zod';
 const app = express();
 const PORT = 5000;
 
-app.engine('hbs', hbs.express4())
+app.engine('hbs', hbs.express4( {
+    defaultLayout: './src/views/layouts/main.hbs'
+}))
 app.set('view engine', 'hbs');
 app.set('views', './src/views');
 
