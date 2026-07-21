@@ -5,6 +5,9 @@ import bcrypt from 'bcrypt';
 import { prisma } from './src/config/prisma.js';
 import { hash } from 'zod';
 
+import  jwt  from 'jsonwebtoken';
+import cookieParser from 'cookie-parser';
+
 
 const app = express();
 const PORT = 5000;
@@ -18,6 +21,8 @@ app.set('views', './src/views');
 app.use(express.static('public'));
 
 app.use(express.urlencoded({ extended: false }));
+
+app.use(cookieParser());
 
 app.get('/', (req, res) => {
     res.render('home')
@@ -58,6 +63,53 @@ app.post('/register', async (req, res) => {
     });
 
     res.redirect('/')
+})
+
+app.get('/login', (req, res) => {
+    res.render('login')
+});
+
+app.post('/login', async (req, res) => {
+    const { email, password } = req.body
+
+    const user = await prisma.user.findUnique({
+        where: {
+            email
+        }
+    });
+    
+    if(!user) {
+        console.log('Invalid email or password');
+        return
+    }
+
+    const isValidPassword = await bcrypt.compare(password, user.password);
+
+    if(!isValidPassword) {
+        console.log('Invalid email or password');
+        return;
+    }
+
+    const token = jwt.sign(
+        {
+            userId: user.id,
+            username: user.username,
+            email: user.email
+        },
+        process.env.JWT_SECRET,
+        {
+            expiresIn: '7d'
+        }
+    );
+
+    res.cookie('auth', token, {
+        httpOnly: true,
+        sameSite: 'lax',
+        maxAge: 7 * 24 * 60 * 60 * 1000
+    });
+    
+    res.redirect('/');
+    
 })
 
 app.listen(PORT, () => {
