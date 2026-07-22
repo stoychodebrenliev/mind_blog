@@ -27,13 +27,15 @@
                 <!-- Guest users and Logged users -->
                 <li><a href="/">Home</a></li>
                 <li><a href="#">Blogs</a></li>
-                <!--For guest users-->
+                
+                {{#if isAuthenticated}}
+                <li><a href="/profile">Profile</a></li>
+                <li><a href="/blogs/create">Create Blog</a></li>
+                <li><a href="/logout">Logout</a></li>
+                {{else}}
                 <li><a href="/login">Login</a></li>
                 <li><a href="register">Register</a></li>
-                <!--For loggin users-->
-                <li><a href="#">Profile</a></li>
-                <li><a href="#">Create Blog</a></li>
-                <li><a href="/logout">Logout</a></li>
+                {{/if}}
 
             </ul>
         </nav>

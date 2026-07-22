@@ -80,4 +80,10 @@ authController.post('/login', async (req, res) => {
     }
 });
 
+authController.get('/logout', (req, res) => {
+    res.clearCookie('auth');
+
+    return res.redirect('/')
+})
+
 export default authController;
