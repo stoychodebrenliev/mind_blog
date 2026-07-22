@@ -1,0 +1,28 @@
+
+        <section id="all-blogs-page">
+            <article class="all-blogs-title">
+                <h1>All Blogs</h1>
+            </article>
+
+            {{#each blogs}}
+            <article class="all-blogs-card">
+                <article class="all-blogs-card-image">
+                    <img src="{{image}}" alt="blogs-icon">
+                </article>
+
+                <article class="all-blogs-card-content">   
+                    <h2>{{title}}</h2>
+                    <h3>{{category}}</h3>
+                </article>
+
+                <article class="all-blogs-card-buttons">
+                    <a href="/blogs/{{id}}" class="btn-details">Details</a>
+                </article>
+            </article>
+
+            {{else}}
+            <article class="not-available-blogs">
+                <h1>No blogs created yet.</h1>
+            </article>
+            {{/each}}
+        </section>
